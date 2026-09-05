@@ -2,6 +2,8 @@ package com.example.demo.board;
 
 import com.example.demo.board.dto.BoardCreateRequest;
 import java.util.List;
+import org.springframework.http.HttpStatus;
+import org.springframework.web.server.ResponseStatusException;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -25,6 +27,18 @@ public class BoardService {
     public List<Board> findAll() {
         return boardRepository.findAll();
         // 저장된 게시글을 모두 가져옴.
+    }
+
+    // 전달받은 id와 같은 게시글 한 개를 찾음.
+    public Board findOne(Long id) {
+
+        // Repository에서 id로 게시글을 조회함.
+        // 게시글이 없으면 404 Not Found 예외를 발생시킴.
+        return boardRepository.findById(id)
+                .orElseThrow(() -> new ResponseStatusException(
+                        HttpStatus.NOT_FOUND,
+                        "게시글을 찾을 수 없습니다."
+                ));
     }
 }
 

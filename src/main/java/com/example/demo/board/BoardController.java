@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.PathVariable;
 
 @RestController
 @RequestMapping("/boards")
@@ -28,6 +29,21 @@ public class BoardController {
         // Postman body의 JSON을 BoardCreateRequest DTO에 담음
         return boardService.create(request);
         // 실제 생성 처리는 Service에 맡김.
+    }
+
+    // GET /boards 요청이 들어오면 아래 findAll 메서드를 실행함.
+    @GetMapping
+    public List<Board> findAll() {
+        return boardService.findAll();
+    }
+
+    // GET /boards/{id} 요청이 들어오면 아래 메서드를 실행함.
+    @GetMapping("/{id}")
+    public Board findOne(@PathVariable("id") Long id) {
+
+        // URL에서 받은 id를 Service의 단건 조회 메서드에 전달함.
+        // Service가 돌려준 게시글 한 개를 사용자에게 JSON으로 반환함.
+        return boardService.findOne(id);
     }
 }
 
