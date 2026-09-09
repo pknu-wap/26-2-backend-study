@@ -29,6 +29,10 @@ public class Board {
     }
     // 사용자가 보낸 title과 content로 게시글을 만듬.
     // LocalDateTime.now()가 위 상황의 현재 시간을 읽어 createdAt에 넣음.
+    public void update(String title, String content) {
+        this.title = title;
+        this.content = content;
+    }
 
     public Long getId() {
         return id;
