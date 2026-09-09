@@ -1,13 +1,11 @@
 package com.example.demo;
 
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
+@RequestMapping("/boards")
 public class BoardController {
 
     private final BoardService boardService;
@@ -16,17 +14,34 @@ public class BoardController {
         this.boardService = boardService;
     }
 
-    // 게시글 생성 (JSON 응답 및 200 OK)
-    @PostMapping("/boards")
-    public ResponseEntity<BoardResponse> createBoard(@RequestBody BoardCreateRequest request) {
-        BoardResponse response = boardService.createBoard(request);
-        return ResponseEntity.ok(response);
+    // 1. 게시글 생성
+    @PostMapping
+    public BoardResponse createBoard(@RequestBody BoardCreateRequest request) {
+        return boardService.createBoard(request);
     }
 
-    // 단일 게시글 조회
-    @GetMapping("/boards/{id}")
-    public ResponseEntity<BoardResponse> getBoard(@PathVariable Long id) {
-        BoardResponse response = boardService.getBoard(id);
-        return ResponseEntity.ok(response);
+    // 2. 단일 조회
+    @GetMapping("/{id}")
+    public BoardResponse getBoard(@PathVariable Long id) {
+        return boardService.getBoard(id);
+    }
+
+    // 3. 전체 목록 조회
+    @GetMapping
+    public List<BoardResponse> getAllBoards() {
+        return boardService.getAllBoards();
+    }
+
+    // 4. 게시글 수정
+    @PutMapping("/{id}")
+    public BoardResponse updateBoard(@PathVariable Long id, @RequestBody BoardUpdateRequest request) {
+        return boardService.updateBoard(id, request);
+    }
+
+    // 5. 게시글 삭제 (200 OK + 문자열 반환)
+    @DeleteMapping("/{id}")
+    public String deleteBoard(@PathVariable Long id) {
+        boardService.deleteBoard(id);
+        return "게시글이 삭제되었습니다.";
     }
 }
